@@ -8,14 +8,13 @@ export default function Welcome({ auth }) {
 
                 <header className="container mx-auto flex justify-between items-center py-8 px-6 lg:px-0 relative z-10">
                     <div className="flex items-center space-x-3">
-                        {/* Logo Icon (small logo if needed separately) */}
+                        {/* Logo Icon */}
                         <img
                             className="h-20 w-20 object-contain"
                             src="/ensemble.png"
                             alt="Ensemble Logo"
                         />
                         <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400 select-none">
-                            {/* Changed from red to blue */}
                             Ensemble
                         </h1>
                     </div>
@@ -26,7 +25,6 @@ export default function Welcome({ auth }) {
                                 href={route('dashboard')}
                                 className="px-4 py-2 mr-4 rounded-md bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
                             >
-                                {/* Changed from red to blue */}
                                 Dashboard
                             </Link>
                         ) : (
@@ -35,14 +33,12 @@ export default function Welcome({ auth }) {
                                     href={route('login')}
                                     className="px-4 py-2 rounded-md border border-blue-600 text-blue-600 font-semibold hover:bg-blue-50 dark:hover:bg-blue-900 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 >
-                                    {/* Changed from red to blue */}
                                     Log in
                                 </Link>
                                 <Link
                                     href={route('register')}
                                     className="px-4 py-2 rounded-md bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 >
-                                    {/* Changed from red to blue */}
                                     Register
                                 </Link>
                             </>
@@ -52,7 +48,6 @@ export default function Welcome({ auth }) {
 
                 <main className="flex-grow container mx-auto flex flex-col justify-center items-center px-6 text-center max-w-xl relative z-10">
                     <h2 className="text-5xl font-extrabold mb-6 text-blue-700 dark:text-blue-400 leading-tight">
-                        {/* Changed from red to blue */}
                         Welcome to Ensemble
                     </h2>
                     <p className="text-lg text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
