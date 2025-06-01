@@ -59,7 +59,7 @@ export default function Welcome({ auth }) {
                 </main>
 
                 <footer className="py-10 text-center text-sm text-gray-500 dark:text-gray-400 select-none relative z-10">
-                    Made with ❤️ by lovelylori
+                    ❤️ you 
                 </footer>
             </div>
         </>
