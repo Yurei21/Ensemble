@@ -42,7 +42,7 @@ export default function Index({projects, queryParams = null}) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
+                <h2 className="text-3xl font-semibold leading-tight text-gray-800 dark:text-gray-200 text-center">
                     Projects
                 </h2>
             }

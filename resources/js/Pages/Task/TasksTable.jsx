@@ -43,14 +43,17 @@ export default function TasksTable({ tasks, queryParams = null }) {
             <div className="overflow-auto">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
-                        <th onClick={e => sortChanged('id')} className="px-3 py-2 cursor-pointer"> <div className="flex items-center justify-between">ID<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
-                        <th onClick={e => sortChanged('')} className="px-3 py-2">Image</th>
-                        <th onClick={e => sortChanged('name')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Name<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
-                        <th onClick={e => sortChanged('status')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Status<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
-                        <th onClick={e => sortChanged('created_at')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Created Date<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
-                        <th onClick={e => sortChanged('due_date')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Due Date<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
-                        <th onClick={e => sortChanged('')} className="px-3 py-2">Created By</th>
-                        <th onClick={e => sortChanged('')} className="px-3 py-2 text-right">Action</th>
+                        <tr className="text-nowrap">
+                            <th onClick={e => sortChanged('id')} className="px-3 py-2 cursor-pointer"> <div className="flex items-center justify-between">ID<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
+                            <th onClick={e => sortChanged('')} className="px-3 py-2">Image</th>
+                            <th onClick={e => sortChanged('')} className="px-3 py-2">Project Name</th>
+                            <th onClick={e => sortChanged('name')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Name<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
+                            <th onClick={e => sortChanged('status')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Status<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
+                            <th onClick={e => sortChanged('created_at')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Created Date<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
+                            <th onClick={e => sortChanged('due_date')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Due Date<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
+                            <th onClick={e => sortChanged('')} className="px-3 py-2">Created By</th>
+                            <th onClick={e => sortChanged('')} className="px-3 py-2 text-right">Action</th>
+                        </tr>
                     </thead>
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                         <tr className="text-nowrap">
@@ -79,6 +82,7 @@ export default function TasksTable({ tasks, queryParams = null }) {
                             <th className="px-3 py-2"></th>
                             <th className="px-3 py-2"></th>
                             <th className="px-3 py-2"></th>
+                            <th className="px-3 py-2"></th>
                             <th className="px-3 py-2 "></th>
                         </tr>
                     </thead>
@@ -87,6 +91,7 @@ export default function TasksTable({ tasks, queryParams = null }) {
                             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={task.id}>
                                 <td className="px-3 py-2">{task.id}</td>
                                 <td className="px-3 py-2"><image src={task.image_path} alt="" style={{ width: 60 }} /></td>
+                                <td className="px-3 py-2">{task.project.name}</td>
                                 <td className="px-3 py-2">{task.name}</td>
                                 <td className="px-3 py-2">
                                     <span className={"px-2 py-1 rounded text-white " + TASK_STATUS_CLASS_MAP[task.status]}>
