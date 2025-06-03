@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -42,9 +43,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return inertia("Project/Create"[
-
-        ]);
+        return inertia("Project/Create");
     }
 
     /**
@@ -52,7 +51,12 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['created_by'] = Auth::id();
+        $data['updated_by'] = Auth::id();
+        Project::create($data);
+
+        return to_route('project.index');
     }
 
     /**
