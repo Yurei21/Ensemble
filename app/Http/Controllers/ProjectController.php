@@ -42,7 +42,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return inertia("Project/Create"[
+
+        ]);
     }
 
     /**
@@ -70,10 +72,10 @@ class ProjectController extends Controller
             $query->where("status", request("status"));
         }
 
-        $tasks = $project->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+        $tasks = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
         return inertia('Project/Show', [
             'project'=> new ProjectResource($project),
-            "tasks" => TaskResource::collection($tasks),
+            'tasks' => TaskResource::collection($tasks),
             'queryParams' => request()->query() ?: null,
         ]);
     }

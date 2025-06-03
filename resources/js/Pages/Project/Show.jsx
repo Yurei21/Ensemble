@@ -1,6 +1,6 @@
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, router } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import TasksTable from "../Task/TasksTable";
 
 export default function Show({project, tasks, queryParams}) {
