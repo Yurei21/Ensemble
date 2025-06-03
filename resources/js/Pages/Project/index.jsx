@@ -5,9 +5,23 @@ import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants.j
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
+import { useEffect, useState } from "react";
 
-export default function Index({projects, queryParams = null}) {
+export default function Index({projects, queryParams = null, success}) {
     queryParams = queryParams || {}
+
+    const [showSuccess, setShowSuccess] = useState(!!success)
+
+    useEffect(() => {
+        if(showSuccess) {
+            const timer = setTimeout(() => {
+                setShowSuccess(false)
+            }, 3000)
+
+            return () => clearTimeout(timer)
+        }
+    }, [showSuccess])
+
     const searchFieldChanged = (name, value) => {
         if(value) {
             queryParams[name] = value
@@ -57,6 +71,7 @@ export default function Index({projects, queryParams = null}) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    {showSuccess && success && (<div className="bg-emerald-500 px-4 py-2 text-white rounded mb-3">{success}</div>)}
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                                 <div className="overflow-auto">
@@ -107,7 +122,7 @@ export default function Index({projects, queryParams = null}) {
                                             {projects.data.map(project => (
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={project.id}>
                                                     <td className="px-3 py-2">{project.id}</td>
-                                                    <td className="px-3 py-2"><image src={project.image_path} alt="" style={{width:60}}/></td>
+                                                    <td className="px-3 py-2"><img src={project.image_path} alt="" style={{width:60}}/></td>
                                                     <th className="px-3 py-2 dark:text-white text-white text-nowrap hover:underline">
                                                         <Link href={route('project.show', project.id)}>
                                                             {project.name}

@@ -37,7 +37,7 @@ export default function Create() {
                         <form onSubmit={onSubmit}className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                             <div>
                                 <InputLabel htmlFor="project_image_path" value="Project Image" />
-                                <TextInput id="project_image_path" type="file" name="image" value={data.image} className="mt-1 block w-full" isFocused={true} onChange={e => setData('image', e.target.value)}/>
+                                <TextInput id="project_image_path" type="file" name="image" className="mt-1 block w-full" isFocused={true} onChange={e => setData('image', e.target.files[0])}/>
                                 <InputError message={errors.image} className="mt-2"/>
                             </div>
                             <div className="mt-4">
