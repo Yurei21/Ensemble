@@ -113,7 +113,7 @@ class ProjectController extends Controller
 
         if($request->hasFile('image')) {
             if ($project->image_path) {
-                Storage::disk('public')->delete($project->image_path);
+                Storage::disk('public')->deleteDirectory(dirname($project->image_path));
             }
             $data['image_path'] = $request->file('image')->store('project/' .Str::random(), 'public');
         }
@@ -131,7 +131,7 @@ class ProjectController extends Controller
         $name = $project->name;
 
         if($project->image_path) {
-            Storage::disk('public')->delete($project->image_path);
+            Storage::disk('public')->deleteDirectory(dirname($project->image_path));
         }
 
         $project->delete();
