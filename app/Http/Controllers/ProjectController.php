@@ -96,7 +96,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        
     }
 
     /**
@@ -112,6 +112,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $name = $project->name;
+        $project->delete();
+        return to_route('project.index')->with('success', "Project \"$name\" was deleted");
     }
 }
