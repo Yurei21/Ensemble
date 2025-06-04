@@ -6,34 +6,38 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react"
 import SelectInput from "@/Components/SelectInput";
 
-export default function Create() {
-    const {data, setData, post, processing, errors, reset} = useForm({
-        image: '',
-        name: '',
-        status: '',
-        description: '',
-        due_date: '',
+export default function Edit({project}) {
+    const {data, setData, post, errors, reset} = useForm({
+        image: "",
+        name: project.name ||"",
+        status: project.status || "",
+        description: project.description || "",
+        due_date: project.due_date ||"",
+        _method: "PUT",
     })
 
     const onSubmit = (e) => {
         e.preventDefault()
         
-        post(route('project.store'))
+        post(route('project.update', project.id))
     }
 
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-3xl font-semibold leading-tight text-gray-800 dark:text-gray-200 text-center">
-                    Create Project
+                    Edit Project "{project.name}"
                 </h2>
             }
         >
-            <Head title="Create a project" />
+            <Head title={`Edit Project "${project.name}"`} />
             
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                        {project.image_path && <div>
+                            <img src={project.image_path} className="w-full h-80 object-cover"/>    
+                        </div>}
                         <form onSubmit={onSubmit}className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                             <div>
                                 <InputLabel htmlFor="project_image_path" value="Project Image" />
