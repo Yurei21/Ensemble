@@ -8,6 +8,8 @@ use App\Models\Task;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoretaskRequest;
 use App\Http\Requests\UpdatetaskRequest;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
@@ -42,7 +44,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return inertia("Task/Create");
     }
 
     /**
@@ -50,7 +52,17 @@ class TaskController extends Controller
      */
     public function store(StoretaskRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['created_by'] = Auth::id();
+        $data['updated_by'] = Auth::id();
+
+        if($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('task/' .Str::random(), 'public');
+        }
+
+        Task::create($data);
+
+        return to_route('task.index')->with('success', 'Task was created');
     }
 
     /**
@@ -58,7 +70,26 @@ class TaskController extends Controller
      */
     public function show(task $task)
     {
-        //
+        $this->authorizeTaskOwner($task);
+        
+        $query = $task->tasks();
+        $sortField = request("sort_field", "created_at");
+        $sortDirection = request("sort_direction", "desc");
+
+        if (request("name")) {
+            $query->where("name", "like", "%". request("name"). "%");;
+        }
+
+        if(request("status")) {
+            $query->where("status", request("status"));
+        }
+
+        $tasks = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+        return inertia('Task/Show', [
+            'task'=> new TaskResource($task),
+            'tasks' => TaskResource::collection($tasks),
+            'queryParams' => request()->query() ?: null,
+        ]);
     }
 
     /**
@@ -66,7 +97,9 @@ class TaskController extends Controller
      */
     public function edit(task $task)
     {
-        //
+        return inertia('Task/Edit', [
+            'task' => new TaskResource($task),
+        ]);
     }
 
     /**
@@ -74,7 +107,20 @@ class TaskController extends Controller
      */
     public function update(UpdatetaskRequest $request, task $task)
     {
-        //
+        $data = $request->validated();
+        $task->update($data);
+        $data['updated_by'] = Auth::id();
+
+        if($request->hasFile('image')) {
+            if ($task->image_path) {
+                Storage::disk('public')->deleteDirectory(dirname($task->image_path));
+            }
+            $data['image_path'] = $request->file('image')->store('task/' .Str::random(), 'public');
+        }
+
+        $task->update($data);
+        
+        return to_route('task.index')->with('success', "Task \"$task->name\" was updated");
     }
 
     /**
@@ -82,6 +128,19 @@ class TaskController extends Controller
      */
     public function destroy(task $task)
     {
-        //
+        $name = $task->name;
+
+        if($task->image_path) {
+            Storage::disk('public')->deleteDirectory(dirname($task->image_path));
+        }
+
+        $task->delete();
+        return to_route('task.index')->with('success', "Task \"$name\" was deleted");
+    }
+
+    private function authorizeTaskOwner(Task $task){
+        if ($task->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized Access');
+        }
     }
 }

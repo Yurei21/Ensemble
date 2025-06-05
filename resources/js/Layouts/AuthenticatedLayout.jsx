@@ -43,10 +43,10 @@ export default function AuthenticatedLayout({ header, children }) {
                                     All Tasks
                                 </NavLink>
                                 <NavLink
-                                    href={route('user.index')}
-                                    active={route().current('user.index')}
+                                    href={route('group.index')}
+                                    active={route().current('group.index')}
                                 >
-                                    Users
+                                    Groups
                                 </NavLink>   
                             </div>
                         </div>

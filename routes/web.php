@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -24,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
     Route::resource('project', ProjectController::class);
     Route::resource('task', TaskController::class);
-    Route::resource('user', UserController::class);
+    Route::resource('group', GroupController::class);
 });
 
 Route::middleware('auth')->group(function () {

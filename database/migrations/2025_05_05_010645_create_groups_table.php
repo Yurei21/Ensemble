@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('image_path');
             $table->foreignId('owner_id')->constrained('users')->onDelete('Cascade');
             $table->timestamps();
         });
