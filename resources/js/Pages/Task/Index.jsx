@@ -1,14 +1,16 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import TasksTable from "./TasksTable";
 
 export default function Index({tasks, queryParams = null}) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-3xl font-semibold leading-tight text-gray-800 dark:text-gray-200 text-center">
-                    Tasks
-                </h2>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-3xl font-semibold leading-tight text-gray-800 dark:text-gray-200 ">
+                        Tasks
+                    </h2>
+                </div>
             }
         >
             <Head title="Tasks" />

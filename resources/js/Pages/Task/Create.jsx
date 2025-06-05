@@ -6,13 +6,14 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react"
 import SelectInput from "@/Components/SelectInput";
 
-export default function Create() {
+export default function Create({project}) {
     const {data, setData, post, processing, errors, reset} = useForm({
         image: '',
         name: '',
         status: '',
         description: '',
         due_date: '',
+        project_id: project.id,
     })
 
     const onSubmit = (e) => {
@@ -56,6 +57,17 @@ export default function Create() {
                                 <InputError message={errors.due_date} className="mt-2"/>
                             </div>
                             <div className="mt-4">
+                                <InputLabel htmlFor="project_name" value="Project" />
+                                <TextInput
+                                    id="project_name"
+                                    type="text"
+                                    value={project.name}
+                                    className="mt-1 block w-full"
+                                    disabled
+                                />
+                                <InputError message={errors.due_date} className="mt-2"/>
+                            </div>
+                            <div className="mt-4">
                                 <InputLabel htmlFor="task_status" value="Task Status" />
                                 <SelectInput name="status" id="task_status" value={data.status} className="mt-1 block w-full" onChange={e => setData('status', e.target.value)}> 
                                     <option value="">Select Status</option>
@@ -64,6 +76,16 @@ export default function Create() {
                                     <option value="completed">Completed</option>
                                 </SelectInput>
                                 <InputError message={errors.status} className="mt-2"/>
+                            </div>
+                            <div className="mt-4">
+                                <InputLabel htmlFor="task_priority" value="Task Priority" />
+                                <SelectInput name="priority" id="task_priority" value={data.priority} className="mt-1 block w-full" onChange={e => setData('priority', e.target.value)}> 
+                                    <option value="">Select Priority</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </SelectInput>
+                                <InputError message={errors.priority} className="mt-2"/>
                             </div>
                             <div className="mt-4 text-right">
                                 <Link href={route('task.index')} className="bg-gray-100 px-3 py-1.5 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2">Cancel</Link>

@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoretaskRequest;
 use App\Http\Requests\UpdatetaskRequest;
+use App\Models\Project;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -44,7 +45,11 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return inertia("Task/Create");
+        $project = Project::findOrFail(request('project_id'));
+        
+        return inertia("Task/Create", [
+            'project' => $project,
+        ]);
     }
 
     /**
