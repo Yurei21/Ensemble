@@ -19,7 +19,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $query = Project::query();
+        $query = Project::where('created_by', Auth::id());
 
         $sortField = request("sort_field", "created_at");
         $sortDirection = request("sort_direction", "desc");
@@ -72,6 +72,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        $this->authorizeProjectOwner($project);
+        
         $query = $project->tasks();
         $sortField = request("sort_field", "created_at");
         $sortDirection = request("sort_direction", "desc");
@@ -136,5 +138,11 @@ class ProjectController extends Controller
 
         $project->delete();
         return to_route('project.index')->with('success', "Project \"$name\" was deleted");
+    }
+
+    private function authorizeProjectOwner(Project $project){
+        if ($project->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized Access');
+        }
     }
 }

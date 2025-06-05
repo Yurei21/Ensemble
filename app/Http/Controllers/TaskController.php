@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $query = Task::query();
+        $query = Task::where('created_by', Auth::id());
 
         $sortField = request("sort_field", "created_at");
         $sortDirection = request("sort_direction", "desc");

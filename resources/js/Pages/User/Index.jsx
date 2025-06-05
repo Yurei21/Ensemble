@@ -1,7 +1,5 @@
 import Pagination from "@/Components/Pagination";
-import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
-import { USER_STATUS_CLASS_MAP, USER_STATUS_TEXT_MAP } from "@/constants.js";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
@@ -111,40 +109,28 @@ export default function Index({users, queryParams = null, success}) {
                                                     />
                                                 </th>
                                                 <th className="px-3 py-2">
-                                                    <SelectInput 
-                                                    defaultValue={queryParams.status}
-                                                    onChange={e => searchFieldChanged('status', e.target.value)}
-                                                    className="w-full">
-                                                        <option value="">Select Status</option>
-                                                        <option value="pending">Pending</option>
-                                                        <option value="in_progress">In Progress</option>
-                                                        <option value="completed">Completed</option>
-                                                    </SelectInput>
+                                                    <TextInput
+                                                    className="w-full"
+                                                    defaultValue={queryParams.email}
+                                                    placeholder="Email"
+                                                    onBlur={e => searchFieldChanged('email', e.target.value)}
+                                                    onKeyPress={e => onKeyPress('email', e)}
+                                                    />
                                                 </th>
                                                 <th className="px-3 py-2"></th>
-                                                <th className="px-3 py-2"></th>
-                                                <th className="px-3 py-2"></th>
-                                                <th className="px-3 py-2 "></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {users.data.map(user => (
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={user.id}>
                                                     <td className="px-3 py-2">{user.id}</td>
-                                                    <td className="px-3 py-2"><img src={user.image_path} alt="" style={{width:60}}/></td>
                                                     <th className="px-3 py-2 dark:text-white text-white text-nowrap hover:underline">
-                                                        <Link href={route('user.show', user.id)}>
-                                                            {user.name}
-                                                        </Link>
+                                                        {user.name}
                                                     </th>
                                                     <td className="px-3 py-2">
-                                                        <span className={"px-2 py-1 rounded text-white " + USER_STATUS_CLASS_MAP[user.status]}>
-                                                            {USER_STATUS_TEXT_MAP[user.status]}
-                                                        </span>
+                                                        {user.email}
                                                     </td>
                                                     <td className="px-3 py-2">{user.created_at}</td>
-                                                    <td className="px-3 py-2 text-nowrap">{user.due_date}</td>
-                                                    <td className="px-3 py-2">{user.createdBy.name}</td>
                                                     <td className="px-3 py-2 text-nowrap">
                                                         <Link href={route('user.edit', user.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1">
                                                             Edit
