@@ -11,7 +11,11 @@ class Group extends Model
     use HasFactory;
 
     public function users() {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'group_members');
+    }
+
+    public function members () {
+        return $this->hasMany(GroupMembers::class);
     }
 
     public function projects() {

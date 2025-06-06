@@ -24,7 +24,10 @@ class Project extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    
+    public function owner() {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
     public function group()
     {
         return $this->belongsTo(Group::class);

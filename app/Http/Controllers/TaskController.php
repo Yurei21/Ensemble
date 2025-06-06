@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProjectResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
@@ -45,10 +47,15 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $project = Project::findOrFail(request('project_id'));
-        
-        return inertia("Task/Create", [
-            'project' => $project,
+        $project = Project::with(['group.users', 'owner'])->findOrFail(request('project_id'));
+
+        $assignableUsers = $project->group_id
+            ? $project->group->users
+            : collect([$project->owner]);
+
+        return inertia('Task/Create', [
+            'project' => new ProjectResource($project),
+            'assignableUsers' => UserResource::collection($assignableUsers),
         ]);
     }
 

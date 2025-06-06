@@ -6,7 +6,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react"
 import SelectInput from "@/Components/SelectInput";
 
-export default function Create({project}) {
+export default function Create({project, assignableUsers}) {
     const {data, setData, post, processing, errors, reset} = useForm({
         image: '',
         name: '',
@@ -14,7 +14,10 @@ export default function Create({project}) {
         description: '',
         due_date: '',
         project_id: project.id,
+        assigned_user_id: '',
     })
+
+    console.log(assignableUsers);
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -86,6 +89,16 @@ export default function Create({project}) {
                                     <option value="high">High</option>
                                 </SelectInput>
                                 <InputError message={errors.priority} className="mt-2"/>
+                            </div>
+                            <div className="mt-4">
+                                <InputLabel htmlFor="assigned_user_id" value="Assign User" />
+                                    <SelectInput name="Assigned" id="assigned_user_id" value={data.assigned_user_id} className="mt-1 block w-full" onChange={e => setData('assigned_user_id', e.target.value)}> 
+                                        <option value="">Select User</option>
+                                        {assignableUsers.data && assignableUsers.data.map(user => (
+                                            <option key={user.id} value={user.id}>{user.name}</option>
+                                        ))}
+                                    </SelectInput>
+                                <InputError message={errors.assigned_user_id} className="mt-2"/>
                             </div>
                             <div className="mt-4 text-right">
                                 <Link href={route('task.index')} className="bg-gray-100 px-3 py-1.5 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2">Cancel</Link>
