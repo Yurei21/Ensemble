@@ -6,15 +6,20 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react"
 import SelectInput from "@/Components/SelectInput";
 
-export default function Edit({task}) {
+export default function Edit({task, project, assignableUsers}) {
+    console.log(task)
     const {data, setData, post, errors, reset} = useForm({
         image: "",
         name: task.name ||"",
         status: task.status || "",
         description: task.description || "",
         due_date: task.due_date ||"",
+        project_id: project.id,
+        assigned_user_id: '',
         _method: "PUT",
     })
+
+    console.log(data)
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -51,7 +56,7 @@ export default function Edit({task}) {
                             </div>
                             <div className="mt-4">
                                 <InputLabel htmlFor="task_description" value="Task Description" />
-                                <TextAreaInput id="task_description" name="text" value={data.description} className="mt-1 block w-full" isFocused={true} onChange={e => setData('description', e.target.value)}/>
+                                <TextAreaInput id="task_description" name="text" value={data.description} className="mt-1 block     w-full" isFocused={true} onChange={e => setData('description', e.target.value)}/>
                                 <InputError message={errors.description} className="mt-2"/>
                             </div>
                             <div className="mt-4">
@@ -68,6 +73,37 @@ export default function Edit({task}) {
                                     <option value="completed">Completed</option>
                                 </SelectInput>
                                 <InputError message={errors.status} className="mt-2"/>
+                            </div>
+                            <div className="mt-4">
+                                <InputLabel htmlFor="task_priority" value="Task Priority" />
+                                <SelectInput name="priority" id="task_priority" value={data.priority} className="mt-1 block w-full" onChange={e => setData('priority', e.target.value)}> 
+                                    <option value="">Select Priority</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </SelectInput>
+                                <InputError message={errors.priority} className="mt-2"/>
+                            </div>
+                            <div className="mt-4">
+                                <InputLabel htmlFor="assigned_user_id" value="Assign User" />
+                                    <SelectInput name="Assigned" id="assigned_user_id" value={data.assigned_user_id} className="mt-1 block w-full" onChange={e => setData('assigned_user_id', e.target.value)}> 
+                                        <option value="">Select User</option>
+                                        {assignableUsers.data && assignableUsers.data.map(user => (
+                                            <option key={user.id} value={user.id}>{user.name}</option>
+                                        ))}
+                                    </SelectInput>
+                                <InputError message={errors.assigned_user_id} className="mt-2"/>
+                            </div>
+                            <div className="mt-4">
+                            <InputLabel htmlFor="project_name" value="Project" />
+                                <TextInput
+                                    id="project_name"
+                                    type="text"
+                                    value={project.name}
+                                    className="mt-1 block w-full"
+                                    disabled
+                                />
+                                <InputError message={errors.project_id} className="mt-2"/>
                             </div>
                             <div className="mt-4 text-right">
                                 <Link href={route('task.index')} className="bg-gray-100 px-3 py-1.5 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2">Cancel</Link>

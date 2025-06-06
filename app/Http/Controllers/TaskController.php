@@ -84,23 +84,8 @@ class TaskController extends Controller
     {
         $this->authorizeTaskOwner($task);
         
-        $query = $task->tasks();
-        $sortField = request("sort_field", "created_at");
-        $sortDirection = request("sort_direction", "desc");
-
-        if (request("name")) {
-            $query->where("name", "like", "%". request("name"). "%");;
-        }
-
-        if(request("status")) {
-            $query->where("status", request("status"));
-        }
-
-        $tasks = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
         return inertia('Task/Show', [
-            'task'=> new TaskResource($task),
-            'tasks' => TaskResource::collection($tasks),
-            'queryParams' => request()->query() ?: null,
+            'task' => new TaskResource($task),
         ]);
     }
 
@@ -109,8 +94,19 @@ class TaskController extends Controller
      */
     public function edit(task $task)
     {
+        $project = Project::with(['group.users', 'owner'])->findOrFail($task->project_id);
+
+        $assignableUsers = $project->group_id
+            ? $project->group->users
+            : collect([$project->owner]);
+
         return inertia('Task/Edit', [
             'task' => new TaskResource($task),
+            'project' => [
+                'id' => $project->id,
+                'name' => $project->name,
+            ],
+            'assignableUsers' => UserResource::collection($assignableUsers),
         ]);
     }
 
