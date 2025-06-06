@@ -15,6 +15,7 @@ export default function Edit({task, project, assignableUsers}) {
         description: task.description || "",
         due_date: task.due_date ||"",
         project_id: project.id,
+        priority: task.priority || "",
         assigned_user_id: '',
         _method: "PUT",
     })

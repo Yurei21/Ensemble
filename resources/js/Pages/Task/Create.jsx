@@ -17,8 +17,6 @@ export default function Create({project, assignableUsers}) {
         assigned_user_id: '',
     })
 
-    console.log(assignableUsers);
-
     const onSubmit = (e) => {
         e.preventDefault()
         
