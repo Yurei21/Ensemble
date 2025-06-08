@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
+use Illuminate\Support\Facades\Auth;
 
 class GroupController extends Controller
 {
@@ -14,7 +16,26 @@ class GroupController extends Controller
      */
     public function index()
     {
-        //
+        $query = Group::query();
+
+        $sortField = request("sort_field", "created_at");
+        $sortDirection = request("sort_direction", "desc");
+
+        if (request("name")) {
+            $query->where("name", "like", "%". request("name"). "%");;
+        }
+
+        if(request("status")) {
+            $query->where("status", request("status"));
+        }
+
+        $projects = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+         
+        return inertia("Group/Index", [
+            'groups' => GroupResource::collection($projects),
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success'),
+        ]);
     }
 
     /**

@@ -5,7 +5,7 @@ import { Head, Link, router } from "@inertiajs/react";
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
 import { useEffect, useState } from "react";
 
-export default function Index({users, queryParams = null, success}) {
+export default function Index({groups, queryParams = null, success}) {
     queryParams = queryParams || {}
 
     const [showSuccess, setShowSuccess] = useState(!!success)
@@ -27,7 +27,7 @@ export default function Index({users, queryParams = null, success}) {
             delete queryParams[name]
         }
 
-        router.get(route('user.index'), queryParams)
+        router.get(route('group.index'), queryParams)
     }
 
     const onKeyPress = (name, e) => {
@@ -48,15 +48,15 @@ export default function Index({users, queryParams = null, success}) {
             queryParams.sort_direction = 'asc'
         }
 
-        router.get(route('user.index'), queryParams)
+        router.get(route('group.index'), queryParams)
     }
 
-    const deleteUser = (user) => {
-        if(!window.confirm('Are you sure you want to delete the user?')) {
+    const deleteGroup = (group) => {
+        if(!window.confirm('Are you sure you want to delete the group?')) {
             return
         }
         
-        router.visit(route('user.destroy', user.id), {
+        router.visit(route('group.destroy', group.id), {
             method: 'delete',
             preserveScroll: true,
             preserveState: false,
@@ -68,16 +68,16 @@ export default function Index({users, queryParams = null, success}) {
             header={
                 <div className="flex justify-between items-center">
                     <h2 className="text-3xl font-semibold leading-tight text-gray-800 dark:text-gray-200 ">
-                        Users
+                        Groups
                     </h2>
                     <Link
-                        href={route("user.create")}
+                        href={route("group.create")}
                         className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"                
                     >Add New</Link>
                 </div>
             }
         >
-            <Head title="Users" />
+            <Head title="Groups" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -103,7 +103,7 @@ export default function Index({users, queryParams = null, success}) {
                                                     <TextInput
                                                     className="w-full"
                                                     defaultValue={queryParams.name}
-                                                    placeholder="User Name"
+                                                    placeholder="Group Name"
                                                     onBlur={e => searchFieldChanged('name', e.target.value)}
                                                     onKeyPress={e => onKeyPress('name', e)}
                                                     />
@@ -121,21 +121,21 @@ export default function Index({users, queryParams = null, success}) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {users.data.map(user => (
-                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={user.id}>
-                                                    <td className="px-3 py-2">{user.id}</td>
+                                            {groups.data.map(group => (
+                                                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={group.id}>
+                                                    <td className="px-3 py-2">{group.id}</td>
                                                     <th className="px-3 py-2 dark:text-white text-white text-nowrap hover:underline">
-                                                        {user.name}
+                                                        {group.name}
                                                     </th>
                                                     <td className="px-3 py-2">
-                                                        {user.email}
+                                                        {group.email}
                                                     </td>
-                                                    <td className="px-3 py-2">{user.created_at}</td>
+                                                    <td className="px-3 py-2">{group.created_at}</td>
                                                     <td className="px-3 py-2 text-nowrap">
-                                                        <Link href={route('user.edit', user.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1">
+                                                        <Link href={route('group.edit', group.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1">
                                                             Edit
                                                         </Link>
-                                                        <button onClick={e => deleteUser(user)} className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1">
+                                                        <button onClick={e => deleteGroup(group)} className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1">
                                                             Delete
                                                         </button>
                                                     </td>
@@ -144,7 +144,7 @@ export default function Index({users, queryParams = null, success}) {
                                         </tbody>
                                     </table>
                                 </div>
-                            <Pagination links={users.meta.links}></Pagination>
+                            <Pagination links={groups.meta.links}></Pagination>
                         </div>
                     </div>
                 </div>
