@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 export default function Index({groups, queryParams = null, success}) {
     queryParams = queryParams || {}
 
+    console.log(groups);
+
     const [showSuccess, setShowSuccess] = useState(!!success)
 
     useEffect(() => {
@@ -90,7 +92,7 @@ export default function Index({groups, queryParams = null, success}) {
                                                 <tr className="">
                                                     <th onClick={e => sortChanged('id')} className="px-3 py-2 cursor-pointer"> <div className="flex items-center justify-between">ID<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
                                                     <th onClick={e => sortChanged('name')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Name<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
-                                                    <th onClick={e => sortChanged('status')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Email<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
+                                                    <th onClick={e => sortChanged('status')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Owner<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
                                                     <th onClick={e => sortChanged('created_at')} className="px-3 py-2 cursor-pointer"><div className="flex items-center justify-between">Created Date<div><ChevronUpIcon className="w-4" /><ChevronDownIcon className="w-4 -mt-2" /></div></div></th>
                                                     <th onClick={e => sortChanged('')} className="px-3 py-2 text-right">Action</th>
                                                 </tr>
@@ -108,15 +110,7 @@ export default function Index({groups, queryParams = null, success}) {
                                                     onKeyPress={e => onKeyPress('name', e)}
                                                     />
                                                 </th>
-                                                <th className="px-3 py-2">
-                                                    <TextInput
-                                                    className="w-full"
-                                                    defaultValue={queryParams.email}
-                                                    placeholder="Email"
-                                                    onBlur={e => searchFieldChanged('email', e.target.value)}
-                                                    onKeyPress={e => onKeyPress('email', e)}
-                                                    />
-                                                </th>
+                                                <th className="px-3 py-2"></th>
                                                 <th className="px-3 py-2"></th>
                                             </tr>
                                         </thead>
@@ -128,7 +122,7 @@ export default function Index({groups, queryParams = null, success}) {
                                                         {group.name}
                                                     </th>
                                                     <td className="px-3 py-2">
-                                                        {group.email}
+                                                        {group.owner.name}
                                                     </td>
                                                     <td className="px-3 py-2">{group.created_at}</td>
                                                     <td className="px-3 py-2 text-nowrap">
