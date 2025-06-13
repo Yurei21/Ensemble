@@ -15,11 +15,11 @@ class Group extends Model
     }
 
     public function users() {
-        return $this->belongsTo(User::class, 'group_members');
+        return $this->belongsToMany(User::class, 'group_members');
     }
 
-    public function members () {
-        return $this->hasMany(GroupMembers::class);
+    public function group () {
+        return $this->belongsToMany(Group::class, 'group_members');
     }
 
     public function projects() {
