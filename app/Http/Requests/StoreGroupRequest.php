@@ -11,7 +11,7 @@ class StoreGroupRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreGroupRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'image'], 
+            'group_members' => ['required', 'array', 'min:1'],
+            'group_members.*' => ['exists:users,id'],
         ];
     }
 }

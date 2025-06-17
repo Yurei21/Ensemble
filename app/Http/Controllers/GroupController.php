@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+
 
 class GroupController extends Controller
 {
@@ -43,7 +47,10 @@ class GroupController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::query()->orderBy('name', 'asc')->get();
+        return inertia("Group/Create",[
+            'users' => UserResource::collection($users)
+        ]);
     }
 
     /**
@@ -51,7 +58,15 @@ class GroupController extends Controller
      */
     public function store(StoreGroupRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('group/' .Str::random(), 'public');
+        }
+
+        Group::create($data);
+
+        return to_route('group.index')->with('success', 'Group was created');
     }
 
     /**

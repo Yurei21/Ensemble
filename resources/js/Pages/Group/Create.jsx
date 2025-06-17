@@ -1,14 +1,16 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
+import Select from 'react-select';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react"
 
-export default function Create() {
+export default function Create({users}) {
     const {data, setData, post, processing, errors, reset} = useForm({
         image: '',
         name: '',
         email: '',
+        group_members: [],
         created_at: '',
     })
 
@@ -17,6 +19,11 @@ export default function Create() {
         
         post(route('group.store'))
     }
+
+    const userOptions = users.data.map((user) => ({
+        value: user.id,
+        label: user.name,
+    }));
 
     return (
         <AuthenticatedLayout
@@ -43,9 +50,18 @@ export default function Create() {
                                 <InputError message={errors.name} className="mt-2"/>
                             </div>
                             <div className="mt-4">
-                                <InputLabel htmlFor="group_email" value="Group Email" />
-                                <TextInput id="group_email" type="text" name="text" value={data.email} className="mt-1 block w-full" isFocused={true} onChange={e => setData('email', e.target.value)}/>
-                                <InputError message={errors.name} className="mt-2"/>
+                                <InputLabel htmlFor="group_members" value="Group Members" />
+                                <Select
+                                    isMulti
+                                    name="group_members"
+                                    options={userOptions}
+                                    className="basic-multi-select mt-1"
+                                    classNamePrefix="select"
+                                    onChange={(selected) =>
+                                        setData('group_members', selected.map((opt) => opt.value))
+                                    }
+                                />
+                                <InputError message={errors.group_members} className="mt-2" />
                             </div>
                             <div className="mt-4 text-right">
                                 <Link href={route('group.index')} className="bg-gray-100 px-3 py-1.5 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2">Cancel</Link>

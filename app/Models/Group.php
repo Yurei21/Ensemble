@@ -10,6 +10,8 @@ class Group extends Model
     /** @use HasFactory<\Database\Factories\GroupFactory> */
     use HasFactory;
 
+    protected $fillable = ['name', 'image_path', 'owner_id'];
+
     public function owner() {
         return $this->belongsTo(User::class, 'owner_id');
     }
