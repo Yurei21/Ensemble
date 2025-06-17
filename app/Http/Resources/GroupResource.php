@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,8 +20,8 @@ class GroupResource extends JsonResource
             'name'=> $this->name,
             'image_path'=> $this->image_path,
             'owner'=> new UserResource($this->owner),
-            'created_at'=> $this->created_at,
-            'updated_at'=> $this->updated_at,
+            'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
+            'updated_at' => (new Carbon($this->due_date))->format('Y-m-d'),
 
             'members' => UserResource::collection($this->whenLoaded('users')),
         ];

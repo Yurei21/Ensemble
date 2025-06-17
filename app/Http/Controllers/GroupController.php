@@ -59,12 +59,19 @@ class GroupController extends Controller
     public function store(StoreGroupRequest $request)
     {
         $data = $request->validated();
+        $data['owner_id'] = Auth::id(); 
+        $memberIds = $data['group_members'];
+        $memberIds[] = Auth::id();
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('group/' .Str::random(), 'public');
         }
 
-        Group::create($data);
+        $group = Group::create($data);
+        if (!empty($data['group_members'])) {
+            $group->users()->attach($data['group_members']);
+        }
+        $group->users()->attach(array_unique($memberIds));
 
         return to_route('group.index')->with('success', 'Group was created');
     }
