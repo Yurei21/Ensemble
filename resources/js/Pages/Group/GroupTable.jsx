@@ -1,11 +1,10 @@
 import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
-import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants.js";
 import { Link, router } from "@inertiajs/react";
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
 
-export default function TasksTable({ tasks, queryParams = null }) {
+export default function GroupsTable({ groups, queryParams = null }) {
     queryParams = queryParams || {}
     const searchFieldChanged = (name, value) => {
         if(value) {
@@ -14,7 +13,7 @@ export default function TasksTable({ tasks, queryParams = null }) {
             delete queryParams[name]
         }
 
-        router.get(route('task.index'), queryParams)
+        router.get(route('group.index'), queryParams)
     }
 
     const onKeyPress = (name, e) => {
@@ -35,15 +34,15 @@ export default function TasksTable({ tasks, queryParams = null }) {
             queryParams.sort_direction = 'asc'
         }
 
-        router.get(route('task.index'), queryParams)
+        router.get(route('group.index'), queryParams)
     }
 
-    const deleteTask = (task) => {
+    const deleteGroup = (group) => {
         if(!window.confirm('Are you sure you want to delete the project?')) {
             return
         }
         
-        router.visit(route('task.destroy', task.id), {
+        router.visit(route('group.destroy', group.id), {
             method: 'delete',
             preserveScroll: true,
             preserveState: false,
@@ -75,7 +74,7 @@ export default function TasksTable({ tasks, queryParams = null }) {
                                 <TextInput
                                     className="w-full"
                                     defaultValue={queryParams.name}
-                                    placeholder="Task Name"
+                                    placeholder="Group Name"
                                     onBlur={e => searchFieldChanged('name', e.target.value)}
                                     onKeyPress={e => onKeyPress('name', e)}
                                 />
@@ -99,27 +98,21 @@ export default function TasksTable({ tasks, queryParams = null }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {tasks.data.map(task => (
-                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={task.id}>
-                                <td className="px-3 py-2">{task.id}</td>
-                                <td className="px-3 py-2"><image src={task.image_path} alt="" style={{ width: 60 }} /></td>
-                                <td className="px-3 py-2">{task.project.name}</td>
+                        {groups.data.map(group => (
+                            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={group.id}>
+                                <td className="px-3 py-2">{group.id}</td>
+                                <td className="px-3 py-2"><image src={group.image_path} alt="" style={{ width: 60 }} /></td>
+                                <td className="px-3 py-2">{group.project.name}</td>
                                 <th className="px-3 py-2 text-gray-100 hover:underline">
-                                    <Link href={route("task.show", task.id)}>{task.name}</Link>
+                                    <Link href={route("group.show", group.id)}>{group.name}</Link>
                                 </th>
+                                <td className="px-3 py-2">{group.created_at}</td>
+                                <td className="px-3 py-2">{group.createdBy.name}</td>
                                 <td className="px-3 py-2">
-                                    <span className={"px-2 py-1 rounded text-white " + TASK_STATUS_CLASS_MAP[task.status]}>
-                                        {TASK_STATUS_TEXT_MAP[task.status]}
-                                    </span>
-                                </td>
-                                <td className="px-3 py-2">{task.created_at}</td>
-                                <td className="px-3 py-2 text-nowrap">{task.due_date}</td>
-                                <td className="px-3 py-2">{task.createdBy.name}</td>
-                                <td className="px-3 py-2">
-                                    <Link href={route('task.edit', task.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1">
+                                    <Link href={route('group.edit', group.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1">
                                         Edit
                                     </Link>
-                                    <button onClick={e => deleteTask(task)} className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1">
+                                    <button onClick={e => deleteGroup(group)} className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1">
                                         Delete
                                     </button>
                                 </td>
@@ -128,7 +121,7 @@ export default function TasksTable({ tasks, queryParams = null }) {
                     </tbody>
                 </table>
             </div>
-            <Pagination links={tasks.meta.links}></Pagination>
+            <Pagination links={groups.meta.links}></Pagination>
         </>
     )
 }
