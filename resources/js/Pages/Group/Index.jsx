@@ -118,8 +118,8 @@ export default function Index({groups, queryParams = null, success}) {
                                             {groups.data.map(group => (
                                                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={group.id}>
                                                     <td className="px-3 py-2">{group.id}</td>
-                                                    <th className="px-3 py-2 dark:text-white text-white text-nowrap hover:underline">
-                                                        {group.name}
+                                                    <th className="px-3 py-2 text-gray-100 hover:underline">
+                                                        <Link href={route("group.show", group.id)}>{group.name}</Link>
                                                     </th>
                                                     <td className="px-3 py-2">
                                                         {group.owner.name}
