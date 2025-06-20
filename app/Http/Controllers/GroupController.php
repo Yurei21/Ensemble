@@ -81,7 +81,9 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        //
+        return inertia('Group/Show', [
+            'group' => new GroupResource($group)
+        ]);
     }
 
     /**
