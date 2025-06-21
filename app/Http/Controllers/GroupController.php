@@ -18,29 +18,29 @@ class GroupController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $query = Group::query();
+        public function index()
+        {
+            $query = Group::query();
 
-        $sortField = request("sort_field", "created_at");
-        $sortDirection = request("sort_direction", "desc");
+            $sortField = request("sort_field", "created_at");
+            $sortDirection = request("sort_direction", "desc");
 
-        if (request("name")) {
-            $query->where("name", "like", "%". request("name"). "%");;
+            if (request("name")) {
+                $query->where("name", "like", "%". request("name"). "%");;
+            }
+
+            if(request("status")) {
+                $query->where("status", request("status"));
+            }
+
+            $projects = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+            
+            return inertia("Group/Index", [
+                'groups' => GroupResource::collection($projects),
+                'queryParams' => request()->query() ?: null,
+                'success' => session('success'),
+            ]);
         }
-
-        if(request("status")) {
-            $query->where("status", request("status"));
-        }
-
-        $projects = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
-         
-        return inertia("Group/Index", [
-            'groups' => GroupResource::collection($projects),
-            'queryParams' => request()->query() ?: null,
-            'success' => session('success'),
-        ]);
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -81,8 +81,19 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
+        $query = $group->users();
+        $sortField = request("sort_field", "name");
+        $sortDirection = request("sort_direction", "desc");
+
+        if (request("name")) {
+            $query->where("name", "like", "%" .request("name") . "%");
+        }
+
+        $members = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
         return inertia('Group/Show', [
-            'group' => new GroupResource($group)
+            'group' => new GroupResource($group),
+            'members' => UserResource::collection($members),
+            'queryParams' => request()->query() ?: null,
         ]);
     }
 

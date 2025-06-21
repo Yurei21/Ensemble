@@ -1,9 +1,10 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
-import TasksTable from "../Task/TasksTable";
+import GroupTable from "../Group/GroupTable";
 
-export default function Show({group, tasks, queryParams}) {
+export default function Show({group, members, queryParams}) {
     queryParams = queryParams || {}
+    
     return (
         <AuthenticatedLayout
             header={
@@ -35,34 +36,20 @@ export default function Show({group, tasks, queryParams}) {
                                         <p className="mt-1">{group.name}</p>
                                     </div>
                                     <div className="mt-4">
-                                        <label className="font-bold text-lg">Group Status</label>
-                                        <p className="mt-1">
-                                            {group.email}
-                                        </p>
-                                    </div>
-                                    <div className="mt-4">
                                         <label className="font-bold text-lg">Created By</label>
-                                        <p className="mt-1">{group.createdBy.name}</p>
+                                        <p className="mt-1">{group.owner.name}</p>
                                     </div>
                                 </div>
-                                <div>
-                                    <div className="mt-4">
-                                        <label className="font-bold text-lg">Due Date</label>
-                                        <p className="mt-1">{group.due_date}</p>
-                                    </div>
+                                <div>   
                                     <div className="mt-4">
                                         <label className="font-bold text-lg">Created at</label>
                                         <p className="mt-1">{group.created_at}</p>
                                     </div>
                                         <div className="mt-4">
                                         <label className="font-bold text-lg">Updated By</label>
-                                        <p className="mt-1">{group.updatedBy.name}</p>
+                                        <p className="mt-1">{group.updated_at}</p>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="mt-4">
-                                <label className="font-bold text-lg">Group Description</label>
-                                <p className="mt-1">{group.description}</p>
                             </div>
                         </div>
                     </div>
@@ -72,7 +59,7 @@ export default function Show({group, tasks, queryParams}) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <TasksTable tasks={tasks} queryParams={queryParams}></TasksTable>
+                            <GroupTable members={members} queryParams={queryParams}></GroupTable>
                         </div>
                     </div>
                 </div>
