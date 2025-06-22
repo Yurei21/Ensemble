@@ -27,7 +27,7 @@ export default function GroupsTable({ members, queryParams = null }) {
             return
         }
         
-        router.visit(route('group.destroy', group.id), {
+        router.visit(route('member.destroy', group.id), {
             method: 'delete',
             preserveScroll: true,
             preserveState: false,
