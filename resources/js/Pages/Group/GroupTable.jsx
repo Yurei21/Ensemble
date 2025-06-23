@@ -13,7 +13,7 @@ export default function GroupsTable({ members, queryParams = null }) {
             delete queryParams[name]
         }
 
-        router.get(route('group.index'), queryParams)
+        router.get(route('group.show'), queryParams)
     }
 
     const onKeyPress = (name, e) => {
