@@ -1,8 +1,6 @@
 import Pagination from "@/Components/Pagination";
-import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import { Link, router } from "@inertiajs/react";
-import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
 
 export default function GroupsTable({ members, queryParams = null }) {
     queryParams = queryParams || {}
@@ -22,17 +20,16 @@ export default function GroupsTable({ members, queryParams = null }) {
         searchFieldChanged(name, e.target.value);
     }
 
-    const deleteGroup = (group) => {
-        if(!window.confirm('Are you sure you want to delete the project?')) {
-            return
-        }
-        
-        router.visit(route('member.destroy', group.id), {
-            method: 'delete',
+    const removeMember = (userId) => {
+        if (!window.confirm("Remove this user from the group?")) return;
+
+        router.visit(route("group.remove-member", [groupId, userId]), {
+            method: "delete",
             preserveScroll: true,
             preserveState: false,
         });
-    }
+    };
+
 
     return (
         <>
@@ -43,12 +40,11 @@ export default function GroupsTable({ members, queryParams = null }) {
                             <th className="px-3 py-2">ID</th>
                             <th className="px-3 py-2">Name</th>
                             <th className="px-3 py-2">Email</th>
-                            <th className="px-3 py-2"></th>
+                            <th className="px-3 py-2">Actions</th>
                         </tr>
                     </thead>
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                         <tr className="text-nowrap">
-                            <th className="px-3 py-2"></th>
                             <th className="px-3 py-2"></th>
                             <th className="px-3 py-2">
                                 <TextInput
@@ -60,20 +56,21 @@ export default function GroupsTable({ members, queryParams = null }) {
                                 />
                             </th>
                             <th className="px-3 py-2"></th>
+                            <th className="px-3 py-2"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {members.data.map(group => (
-                            <tr
-                                key={members.id}
-                                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                            >
-                            <td className="px-3 py-2">{members.id}</td>
-                            <td className="px-3 py-2">{members.name}</td>
-                            <td className="px-3 py-2">{members.email}</td>
-                                <td className="px-3 py-2">
-                                    <button onClick={e => deleteGroup(members)} className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1">
-                                        Delete
+                        {members.data.map(member => (
+                            <tr key={member.id}>
+                                <td>{member.id}</td>
+                                <td>{member.name}</td>
+                                <td>{member.email}</td>
+                                <td>
+                                    <button
+                                        onClick={() => removeMember(member.id)}
+                                        className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
+                                    >
+                                        Remove
                                     </button>
                                 </td>
                             </tr>
