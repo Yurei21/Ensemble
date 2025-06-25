@@ -88,6 +88,7 @@ class GroupController extends Controller
         if (request("name")) {
             $query->where("name", "like", "%" .request("name") . "%");
         }
+        
 
         $members = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
         return inertia('Group/Show', [
@@ -118,6 +119,6 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        //
+        $group->delete();
     }
 }
