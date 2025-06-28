@@ -88,7 +88,6 @@ class GroupController extends Controller
         if (request("name")) {
             $query->where("name", "like", "%" .request("name") . "%");
         }
-        
 
         $members = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
         return inertia('Group/Show', [
@@ -119,6 +118,26 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        $group->delete();
+        $this->authorizeOwner($group);
+
+        $group->users()->detach();
+    }
+
+    public function removeMember(Group $group, User $user)
+    {
+        if ($group->owner_id === $user->id) {
+            return back()->with('error', 'You cannot remove the group owner.');
+        }
+
+        $group->users()->detach($user->id);
+
+        return back()->with('success', 'Member removed from the group.');
+    }
+
+    private function authorizeOwner(Group $group)
+    {
+        if (Auth::id() !== $group->owner_id) {
+            abort(403, 'Unauthorized action. Only the group owner can do this');
+        }
     }
 }

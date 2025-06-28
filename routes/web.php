@@ -26,6 +26,8 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::resource('project', ProjectController::class);
     Route::resource('task', TaskController::class);
     Route::resource('group', GroupController::class);
+
+    Route::delete('/group/{group}/member/{user}', [GroupController::class, 'removeMember'])->name('group.remove-member');
 });
 
 Route::middleware('auth')->group(function () {

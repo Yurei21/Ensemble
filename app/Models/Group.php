@@ -20,10 +20,6 @@ class Group extends Model
         return $this->belongsToMany(User::class, 'group_members');
     }
 
-    public function group () {
-        return $this->belongsToMany(Group::class, 'group_members');
-    }
-
     public function projects() {
         return $this->hasMany(Project::class);
     }
