@@ -10,6 +10,7 @@ use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
@@ -60,18 +61,15 @@ class GroupController extends Controller
     {
         $data = $request->validated();
         $data['owner_id'] = Auth::id(); 
-        $memberIds = $data['group_members'];
-        $memberIds[] = Auth::id();
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('group/' .Str::random(), 'public');
         }
 
         $group = Group::create($data);
-        if (!empty($data['group_members'])) {
-            $group->users()->attach($data['group_members']);
-        }
-        $group->users()->attach(array_unique($memberIds));
+
+        $memberIds = array_unique([...$data['group_members'], Auth::id()]);
+        $group->users()->attach($memberIds);
 
         return to_route('group.index')->with('success', 'Group was created');
     }
@@ -121,6 +119,14 @@ class GroupController extends Controller
         $this->authorizeOwner($group);
 
         $group->users()->detach();
+
+        if ($group->image_path) {
+            Storage::disk('public')->deleteDirectory(dirname($group->image_path));
+        }
+        
+        $group->delete();
+
+        return to_route('group.index')->with('success', 'Group Was Deleted');
     }
 
     public function removeMember(Group $group, User $user)
@@ -138,6 +144,6 @@ class GroupController extends Controller
     {
         if (Auth::id() !== $group->owner_id) {
             abort(403, 'Unauthorized action. Only the group owner can do this');
-        }
+        }   
     }
 }
