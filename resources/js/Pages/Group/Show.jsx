@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";    
 import GroupTable from "../Group/GroupTable";
+import ProjectTable from "../Group/ProjectTable";
 
 export default function Show({group, members, queryParams}) {
     queryParams = queryParams || {}
@@ -60,6 +61,9 @@ export default function Show({group, members, queryParams}) {
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <GroupTable group={group} members={members} queryParams={queryParams}></GroupTable>
+                        </div>
+                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                            <ProjectTable group={group} members={members} queryParams={queryParams}></ProjectTable>
                         </div>
                     </div>
                 </div>

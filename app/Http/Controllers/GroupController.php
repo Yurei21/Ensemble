@@ -79,15 +79,24 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        $query = $group->users();
+        $memberQuery = $group->users();
         $sortField = request("sort_field", "name");
         $sortDirection = request("sort_direction", "desc");
 
         if (request("name")) {
-            $query->where("name", "like", "%" .request("name") . "%");
+            $memberQuery->where("name", "like", "%" .request("name") . "%");
         }
 
-        $members = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+        $members = $memberQuery->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+
+        $projectQuery = $group->projects();
+        
+        if (request("name")) {
+            $projectQuery->where("name", "like", "%" .request("name") . "%");
+        }
+
+        $project = $projectQuery->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+
         return inertia('Group/Show', [
             'group' => new GroupResource($group),
             'members' => UserResource::collection($members),
