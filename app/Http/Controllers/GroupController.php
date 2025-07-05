@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\ProjectResource;
 use App\Http\Resources\UserResource;
 use App\Models\Group;
 use App\Http\Controllers\Controller;
@@ -99,6 +100,7 @@ class GroupController extends Controller
 
         return inertia('Group/Show', [
             'group' => new GroupResource($group),
+            'projects' => new ProjectResource($project),
             'members' => UserResource::collection($members),
             'queryParams' => request()->query() ?: null,
         ]);

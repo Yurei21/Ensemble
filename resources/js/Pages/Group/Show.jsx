@@ -3,7 +3,7 @@ import { Head } from "@inertiajs/react";
 import GroupTable from "../Group/GroupTable";
 import ProjectTable from "../Group/ProjectTable";
 
-export default function Show({group, members, queryParams}) {
+export default function Show({group, members, projects, queryParams}) {
     queryParams = queryParams || {}
     
     return (
