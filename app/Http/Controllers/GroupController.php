@@ -100,7 +100,7 @@ class GroupController extends Controller
 
         return inertia('Group/Show', [
             'group' => new GroupResource($group),
-            'projects' => new ProjectResource($project),
+            'projects' => ProjectResource::collection($project),
             'members' => UserResource::collection($members),
             'queryParams' => request()->query() ?: null,
         ]);
