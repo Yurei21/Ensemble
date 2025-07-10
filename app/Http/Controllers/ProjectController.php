@@ -19,7 +19,13 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $query = Project::where('created_by', Auth::id());
+        $user = Auth::user();
+
+        $query = Project::query()->where(function ($q) use ($user) {
+            $q->where('created_by', $user->id)->orWhereHas('group.users', function ($q2) use ($user) {
+                $q2->where('user_id', $user->id);
+            });
+        });
 
         $sortField = request("sort_field", "created_at");
         $sortDirection = request("sort_direction", "desc");
@@ -99,6 +105,8 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        $this->authorizeProjectOwner($project, true);
+
         return inertia('Project/Edit', [
             'project' => new ProjectResource($project),
         ]);
@@ -109,6 +117,8 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
+        $this->authorizeProjectOwner($project, true);
+
         $data = $request->validated();
         $project->update($data);
         $data['updated_by'] = Auth::id();
@@ -130,6 +140,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $this->authorizeProjectOwner($project, true);
+
         $name = $project->name;
 
         if($project->image_path) {
@@ -140,9 +152,29 @@ class ProjectController extends Controller
         return to_route('project.index')->with('success', "Project \"$name\" was deleted");
     }
 
-    private function authorizeProjectOwner(Project $project){
-        if ($project->created_by !== Auth::id()) {
-            abort(403, 'Unauthorized Access');
+    private function authorizeProjectOwner(Project $project, $asOwner = false){
+        $user = Auth::user();
+        
+        if (!$project->group_id) {
+            if($asOwner && $project->created_by !== $user->id) {
+                abort(403, 'Only the owner can perform this action.');
+            }
+            
+            if (!$asOwner && $project->created_by !== $user->id) {
+                abort(403, 'You do not have access to this solo project.');
+            }
+        }
+
+        if($project->group_id) {
+            $isMember = $project->group->users()->where('user_id', $user->id)->exists();
+
+            if (!$isMember) {
+                abort(403, 'you are not a member of this project');
+            }
+
+            if ($asOwner && $project->group->owner_id !== $user->id && $project->created_by !== $user->id) {
+                abort(403, 'Only the project creatorr can perform this action.');
+            }
         }
     }
 }

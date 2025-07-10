@@ -58,14 +58,14 @@ export default function Show({group, members, projects, queryParams}) {
             </div>
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <GroupTable group={group} members={members} queryParams={queryParams}></GroupTable>
-                        </div>
-                    </div>
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800 mt-5">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <ProjectTable group={group} projects={projects} queryParams={queryParams}></ProjectTable>
+                        </div>
+                    </div>
+                    <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                        <div className="p-6 text-gray-900 dark:text-gray-100">
+                            <GroupTable group={group} members={members} queryParams={queryParams}></GroupTable>
                         </div>
                     </div>
                 </div>
