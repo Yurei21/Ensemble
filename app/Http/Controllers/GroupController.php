@@ -111,7 +111,13 @@ class GroupController extends Controller
      */
     public function edit(Group $group)
     {
-        //
+        $this->authorizeOwner($group);
+        $users = User::query()->orderBy('name', 'asc')->get();
+
+        return inertia('Group/Edit' , [
+            'group' => new GroupResource($group),
+            'users' => UserResource::collection($users)
+        ]);
     }
 
     /**

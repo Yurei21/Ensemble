@@ -9,7 +9,6 @@ export default function Create({users}) {
     const {data, setData, post, processing, errors, reset} = useForm({
         image: '',
         name: '',
-        email: '',
         group_members: [],
         created_at: '',
     })

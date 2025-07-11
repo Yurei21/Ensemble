@@ -1,12 +1,12 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
-import TextAreaInput from "@/Components/TextAreaInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react"
-import SelectInput from "@/Components/SelectInput";
+import Select from 'react-select';
 
-export default function Edit({group}) {
+
+export default function Edit({group, users}) {
     const {data, setData, post, errors, reset} = useForm({
         image: "",
         name: group.name ||"",
@@ -21,6 +21,12 @@ export default function Edit({group}) {
         
         post(route('group.update', group.id))
     }
+
+    const userOptions = users.data.map((user) => ({
+        value: user.id,
+        label: user.name,
+    }));
+
 
     return (
         <AuthenticatedLayout
@@ -50,24 +56,18 @@ export default function Edit({group}) {
                                 <InputError message={errors.name} className="mt-2"/>
                             </div>
                             <div className="mt-4">
-                                <InputLabel htmlFor="group_description" value="Group Description" />
-                                <TextAreaInput id="group_description" name="text" value={data.description} className="mt-1 block w-full" isFocused={true} onChange={e => setData('description', e.target.value)}/>
-                                <InputError message={errors.description} className="mt-2"/>
-                            </div>
-                            <div className="mt-4">
-                                <InputLabel htmlFor="group_due_date" value="Group Deadline" />
-                                <TextInput id="group_due_date" type="date" name="due_date" value={data.due_date} className="mt-1 block w-full" isFocused={true} onChange={e => setData('due_date', e.target.value)}/>
-                                <InputError message={errors.due_date} className="mt-2"/>
-                            </div>
-                            <div className="mt-4">
-                                <InputLabel htmlFor="group_status" value="Group Status" />
-                                <SelectInput name="status" id="group_status" value={data.status} className="mt-1 block w-full" onChange={e => setData('status', e.target.value)}> 
-                                    <option value="">Select Status</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="in_progress">In Progress</option>
-                                    <option value="completed">Completed</option>
-                                </SelectInput>
-                                <InputError message={errors.status} className="mt-2"/>
+                                <InputLabel htmlFor="group_members" value="Group Members" />
+                                <Select
+                                    isMulti
+                                    name="group_members"
+                                    options={userOptions}
+                                    className="basic-multi-select mt-1"
+                                    classNamePrefix="select"
+                                    onChange={(selected) =>
+                                        setData('group_members', selected.map((opt) => opt.value))
+                                    }
+                                />
+                                <InputError message={errors.group_members} className="mt-2" />
                             </div>
                             <div className="mt-4 text-right">
                                 <Link href={route('group.index')} className="bg-gray-100 px-3 py-1.5 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2">Cancel</Link>
