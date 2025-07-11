@@ -9,11 +9,9 @@ import Select from 'react-select';
 export default function Edit({group, users}) {
     const {data, setData, post, errors, reset} = useForm({
         image: "",
-        name: group.name ||"",
-        status: group.status || "",
-        description: group.description || "",
-        due_date: group.due_date ||"",
-        _method: "PUT",
+        name: group.name||"",
+        group_members: group.members ? group.members.map(member => member.id) : [],
+        created_at: "",
     })
 
     const onSubmit = (e) => {
@@ -66,6 +64,7 @@ export default function Edit({group, users}) {
                                     onChange={(selected) =>
                                         setData('group_members', selected.map((opt) => opt.value))
                                     }
+                                    value={userOptions.filter(opt => data.group_members.includes(opt.value))}
                                 />
                                 <InputError message={errors.group_members} className="mt-2" />
                             </div>

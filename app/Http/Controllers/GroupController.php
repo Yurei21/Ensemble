@@ -114,6 +114,8 @@ class GroupController extends Controller
         $this->authorizeOwner($group);
         $users = User::query()->orderBy('name', 'asc')->get();
 
+        $group->load('users');
+
         return inertia('Group/Edit' , [
             'group' => new GroupResource($group),
             'users' => UserResource::collection($users)

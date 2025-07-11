@@ -25,7 +25,6 @@ class GroupResource extends JsonResource
             'owner'=> new UserResource($this->owner),
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
             'updated_at' => (new Carbon($this->due_date))->format('Y-m-d'),
-
             'members' => UserResource::collection($this->whenLoaded('users')),
         ];
     }
