@@ -127,7 +127,20 @@ class GroupController extends Controller
      */
     public function update(UpdateGroupRequest $request, Group $group)
     {
-        //
+        $this->authorizeOwner($group);
+
+        $data = $request->validated();
+
+        if($request->hasFile('image')) {
+            if($group->image_path) {
+                Storage::disk('public')->deleteDirectory(dirname($group->image_path));
+            }
+            $data['image_path'] = $request->file('image')->store('group/' .Str::random(), 'public');
+        }
+
+        $group->update($data);
+
+        return to_route('group.index')->with('success', "Group \"$group->name\" was updated");
     }
 
     /**

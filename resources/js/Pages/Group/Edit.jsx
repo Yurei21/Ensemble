@@ -12,6 +12,7 @@ export default function Edit({group, users}) {
         name: group.name||"",
         group_members: group.members ? group.members.map(member => member.id) : [],
         created_at: "",
+        _method: "PUT",
     })
 
     const onSubmit = (e) => {
