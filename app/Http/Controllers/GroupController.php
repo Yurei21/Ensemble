@@ -140,6 +140,11 @@ class GroupController extends Controller
 
         $group->update($data);
 
+        $memberIds = $data['group_members'];
+        $memberIds[] = $group->owner_id;
+
+        $group->users()->sync(array_unique($memberIds));
+
         return to_route('group.index')->with('success', "Group \"$group->name\" was updated");
     }
 
