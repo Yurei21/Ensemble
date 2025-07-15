@@ -9,6 +9,7 @@ use App\Models\Group;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -175,6 +176,10 @@ class GroupController extends Controller
         $group->users()->detach($user->id);
 
         return back()->with('success', 'Member removed from the group.');
+    }
+
+    public function removeProject(Group $group, Project $project) {
+        $project->group()->detach($group->id);
     }
 
     private function authorizeOwner(Group $group)
