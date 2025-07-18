@@ -21,7 +21,17 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $query = Task::where('created_by', Auth::id());
+        $user = Auth::user();
+        $query = Task::where(function ($q) use ($user){
+            $q->where('created_by', $user->id)
+            ->orWhereHas('project', function ($projectQuery) use ($user) {
+                $projectQuery->where(function ($sub) use ($user) {
+                    $sub->whereNull('group_id')->where('created_by', $user->id);
+                })->orWhereHas('group.users', function ($groupUserQuery) use ($user){
+                    $groupUserQuery->where('user_id', $user->id);
+                });
+            });
+        });
 
         $sortField = request("sort_field", "created_at");
         $sortDirection = request("sort_direction", "desc");
@@ -47,7 +57,8 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $project = Project::with(['group.users', 'owner'])->findOrFail(request('project_id'));
+        $project = Project::findOrFail(request('project_id'));
+        $this->authorizeProjectOwner(new Task(), $project);
 
         $assignableUsers = $project->group_id
             ? $project->group->users
@@ -64,6 +75,9 @@ class TaskController extends Controller
      */
     public function store(StoretaskRequest $request)
     {
+        $project = Project::with('group.users')->findOrFail($request->project_id);
+        $this->authorizeProjectOwner(new Task(), $project);
+
         $data = $request->validated();
         $data['created_by'] = Auth::id();
         $data['updated_by'] = Auth::id();
@@ -82,7 +96,8 @@ class TaskController extends Controller
      */
     public function show(task $task)
     {
-        $this->authorizeTaskOwner($task);
+        $project = Project::with('group.users')->findOrFail($task->project_id);
+        $this->authorizeProjectOwner($task, $project);
         
         return inertia('Task/Show', [
             'task' => new TaskResource($task),
@@ -94,7 +109,9 @@ class TaskController extends Controller
      */
     public function edit(task $task)
     {
-        $project = Project::with(['group.users', 'owner'])->findOrFail($task->project_id);
+        $project = Project::with('group.users')->findOrFail($task->project_id);
+
+        $this->authorizeProjectOwner($task, $project);
 
         $assignableUsers = $project->group_id
             ? $project->group->users
@@ -115,6 +132,9 @@ class TaskController extends Controller
      */
     public function update(UpdatetaskRequest $request, task $task)
     {
+        $project = Project::with('group.users')->findOrFail($task->project_id);
+        $this->authorizeProjectOwner($task, $project);
+
         $data = $request->validated();
         $task->update($data);
         $data['updated_by'] = Auth::id();
@@ -136,6 +156,9 @@ class TaskController extends Controller
      */
     public function destroy(task $task)
     {
+        $project = Project::with('group.users')->findOrFail($task->project_id);
+        $this->authorizeProjectOwner($task, $project, true);
+        
         $name = $task->name;
 
         if($task->image_path) {
@@ -146,9 +169,28 @@ class TaskController extends Controller
         return to_route('task.index')->with('success', "Task \"$name\" was deleted");
     }
 
-    private function authorizeTaskOwner(Task $task){
-        if ($task->created_by !== Auth::id()) {
-            abort(403, 'Unauthorized Access');
+    private function authorizeProjectOwner(Task $task, Project $project, $asOwner = false){
+        $user = Auth::user();
+
+        if (!$project->group_id) {
+            if ($project->created_by !== $user->id) {
+                abort(403, $asOwner
+                    ? 'Only the project owner can perform this action.'
+                    : 'You do not have access to this solo project.'
+                );
+            }
+        } else {
+            $group = $project->group;
+            $isMember = $group->users()->where('user_id', $user->id)->exists();
+
+            if (!$isMember) {
+                abort(403, 'You are not a member of this group project');
+            }
+
+            if ($asOwner && $group->owner_id !== $user->id && $project->created_by !== $user->id) {
+                abort(403, 'Only the group owner or project creator can perform this action');
+            }
         }
     }
+
 }
