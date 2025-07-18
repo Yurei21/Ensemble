@@ -4,13 +4,15 @@ import TextInput from "@/Components/TextInput";
 import TextAreaInput from "@/Components/TextAreaInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react"
+import Select from 'react-select';
 import SelectInput from "@/Components/SelectInput";
 
-export default function Create() {
+export default function Create({groups}) {
     const {data, setData, post, processing, errors, reset} = useForm({
         image: '',
         name: '',
         status: '',
+        groups: [],
         description: '',
         due_date: '',
     })
@@ -20,6 +22,12 @@ export default function Create() {
         
         post(route('project.store'))
     }
+
+    const groupOptions = groups.map((groups) => ({
+        value: groups.id,
+        label: groups.name,
+    }));
+
 
     return (
         <AuthenticatedLayout
@@ -64,6 +72,20 @@ export default function Create() {
                                     <option value="completed">Completed</option>
                                 </SelectInput>
                                 <InputError message={errors.status} className="mt-2"/>
+                            </div>
+                            <div className="mt-4">
+                                <InputLabel htmlFor="group_members" value="Group Members" />
+                                <Select
+                                    isMulti
+                                    name="groups"
+                                    options={groupOptions}
+                                    className="basic-multi-select mt-1"
+                                    classNamePrefix="select"
+                                    onChange={(selected) =>
+                                        setData('groups', selected.map((opt) => opt.value))
+                                    }
+                                />
+                                <InputError message={errors.group_members} className="mt-2" />
                             </div>
                             <div className="mt-4 text-right">
                                 <Link href={route('project.index')} className="bg-gray-100 px-3 py-1.5 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2">Cancel</Link>

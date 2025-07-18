@@ -27,6 +27,7 @@ class StoreProjectRequest extends FormRequest
             "image" => ['nullable', 'image'],
             "description" => ['nullable','string'],
             "due_date" => ['nullable', 'date'],
+            "group_id" => ['nullable', 'exists:group,id'],
             "status" => ['required', Rule::in(['pending', 'in_progress', 'completed'])] 
         ];
     }

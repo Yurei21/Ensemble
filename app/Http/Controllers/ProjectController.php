@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
+use App\Models\Group;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -52,7 +53,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return inertia("Project/Create");
+        $user = Auth::user();
+        $groups = Group::where('owner_id', $user)->get();
+        return inertia("Project/Create", ['groups' => $groups]);
     }
 
     /**
