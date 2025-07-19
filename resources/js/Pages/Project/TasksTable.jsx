@@ -5,7 +5,7 @@ import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants.js";
 import { Link, router } from "@inertiajs/react";
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
 
-export default function TasksTable({tasks, queryParams = null }) {
+export default function TasksTable({project, tasks, queryParams = null }) {
     queryParams = queryParams || {}
     const searchFieldChanged = (name, value) => {
         if(value) {
@@ -55,6 +55,10 @@ export default function TasksTable({tasks, queryParams = null }) {
             <div className="overflow-auto">
                 <div className="flex items-center justify-between mb-3">
                 <h1 className="text-xl font-bold mb-3">Tasks</h1>
+                    <Link
+                        href={route("task.create", `?project_id=${project.id}`)}
+                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"                
+                    >Add a new task</Link>
                 </div>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">

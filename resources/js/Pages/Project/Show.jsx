@@ -1,7 +1,7 @@
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import TasksTable from "../Task/TasksTable";
+import TasksTable from "../Project/TasksTable";
 
 export default function Show({project, tasks, queryParams}) {
     queryParams = queryParams || {}
@@ -12,10 +12,6 @@ export default function Show({project, tasks, queryParams}) {
                     <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                         {`Project "${project.name}"`}
                     </h2>
-                    <Link
-                        href={route("task.create", `?project_id=${project.id}`)}
-                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"                
-                    >Add New</Link>
                 </div>
             }
         >
@@ -81,7 +77,7 @@ export default function Show({project, tasks, queryParams}) {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <TasksTable tasks={tasks} queryParams={queryParams}></TasksTable>
+                            <TasksTable project={project} tasks={tasks} queryParams={queryParams}></TasksTable>
                         </div>
                     </div>
                 </div>
