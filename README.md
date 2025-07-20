@@ -105,12 +105,6 @@ users
 - password
 - ...
 
-admins
-- id
-- name
-- email
-- ...
-
 groups
 - id
 - name
