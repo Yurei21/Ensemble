@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -20,7 +21,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+        [DashboardController::class, 'index'];
     })->name('dashboard');
 
     Route::resource('project', ProjectController::class);
