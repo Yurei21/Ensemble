@@ -19,13 +19,11 @@
 
 ## 🚀 Features
 
-- 🔒 **Multi-auth** for users and admins  
 - 👥 Group creation and member management  
 - 📁 Project management (solo or group-based)  
 - ✅ Task creation, editing, assignment  
 - 📅 Deadlines, statuses, and descriptions for tasks and projects  
 - 📷 Project & group images with file upload  
-- 🔄 Real-time authorization checks  
 - 🧠 Clean UI using Inertia.js with React  
 
 ---
