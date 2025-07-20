@@ -1,61 +1,170 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📌 Project Title
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Ensemble** – A Laravel 12 + React + Inertia.js project management web app with group collaboration and task tracking.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 Table of Contents
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Database Schema](#database-schema)
+- [Project Structure](#project-structure)
+- [License](#license)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- 🔒 **Multi-auth** for users and admins  
+- 👥 Group creation and member management  
+- 📁 Project management (solo or group-based)  
+- ✅ Task creation, editing, assignment  
+- 📅 Deadlines, statuses, and descriptions for tasks and projects  
+- 📷 Project & group images with file upload  
+- 🔄 Real-time authorization checks  
+- 🧠 Clean UI using Inertia.js with React  
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧰 Tech Stack
 
-## Laravel Sponsors
+| Layer       | Tech                          |
+|-------------|-------------------------------|
+| Backend     | Laravel 12                    |
+| Frontend    | React (via Inertia.js)        |
+| Database    | MySQL                         |
+| Authentication | Laravel Breeze (multi-auth) |
+| Styling     | Tailwind CSS (optional)       |
+| Hosting     | Localhost / XAMPP             |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🖼️ Screenshots
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+> *(Optional: Add screenshots or gifs of your UI)*  
+```md
+![Group Page](./screenshots/group-page.png)
+![Project Form](./screenshots/project-form.png)
+```
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## ⚙️ Installation
 
-## Code of Conduct
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/ensemble.git
+cd ensemble
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. **Backend setup**
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
 
-## Security Vulnerabilities
+# Configure your DB in .env
+php artisan migrate --seed
+php artisan storage:link
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. **Frontend setup**
+```bash
+npm install
+npm run dev
+```
 
-## License
+4. **Run the server**
+```bash
+php artisan serve
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## ✅ Usage
+
+- Visit `http://localhost:8000`
+- Register a user account
+- Create a group, invite members
+- Create solo or group projects
+- Add/edit tasks and assign them to users
+
+---
+
+## 🗃️ Database Schema (Simplified)
+
+```text
+users
+- id
+- name
+- email
+- password
+- ...
+
+admins
+- id
+- name
+- email
+- ...
+
+groups
+- id
+- name
+- owner_id
+- image_path
+
+group_members
+- id
+- group_id
+- user_id
+
+projects
+- id
+- name
+- group_id (nullable for solo projects)
+- created_by
+- status
+- description
+- due_date
+
+tasks
+- id
+- name
+- project_id
+- assigned_user_id
+```
+
+---
+
+## 📁 Project Structure
+
+```
+ensemble/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   └── Requests/
+│   └── Models/
+├── resources/
+│   └── js/
+│       ├── Pages/
+│       └── Components/
+├── routes/
+│   └── web.php
+├── public/
+├── storage/
+├── database/
+├── package.json
+├── composer.json
+└── README.md
+```
+
+---
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE).
