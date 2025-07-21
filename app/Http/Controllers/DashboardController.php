@@ -2,31 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Models\Project;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
-
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index () {
-        /**
-         * @var \App\Models\User $user
-         */
-        $user = Auth::user();
+    public function index()
+    {
+        $user = auth()->user();
+        $totalPendingTasks = Task::query()
+            ->where('status', 'pending')
+            ->count();
+        $myPendingTasks = Task::query()
+            ->where('status', 'pending')
+            ->where('assigned_user_id', $user->id)
+            ->count();
 
-        $projects = $user->projects()->withCount('tasks')->latest()->take(5)->get();
 
-        $upcomingTasks = $user->assignedTasks()->where('status', '!=', 'completed')->orderBy('due_date')->take(5)->get();
+        $totalProgressTasks = Task::query()
+            ->where('status', 'in_progress')
+            ->count();
+        $myProgressTasks = Task::query()
+            ->where('status', 'in_progress')
+            ->where('assigned_user_id', $user->id)
+            ->count();
 
-        $groups = $user->groups()->withCount('projects', 'users')->get();
 
-        return inertia('dashboard', [
-            'projects' => $projects,
-            'upcomingTasks' => $upcomingTasks,
-            'groups' => $groups,
-        ]);
+        $totalCompletedTasks = Task::query()
+            ->where('status', 'completed')
+            ->count();
+        $myCompletedTasks = Task::query()
+            ->where('status', 'completed')
+            ->where('assigned_user_id', $user->id)
+            ->count();
+
+        $activeTasks = Task::query()
+            ->whereIn('status', ['pending', 'in_progress'])
+            ->where('assigned_user_id', $user->id)
+            ->limit(10)
+            ->get();
+        $activeTasks = TaskResource::collection($activeTasks);
+        return inertia(
+            'Dashboard',
+            compact(
+                'totalPendingTasks',
+                'myPendingTasks',
+                'totalProgressTasks',
+                'myProgressTasks',
+                'totalCompletedTasks',
+                'myCompletedTasks',
+                'activeTasks'
+            )
+        );
     }
 }
