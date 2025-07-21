@@ -16,7 +16,7 @@ export default function Edit({task, project, assignableUsers}) {
         due_date: task.due_date ||"",
         project_id: project.id,
         priority: task.priority || "",
-        assigned_user_id: '',
+        assigned_user_id: task.assigned_user_id || '',
         _method: "PUT",
     })
 
@@ -87,7 +87,7 @@ export default function Edit({task, project, assignableUsers}) {
                             </div>
                             <div className="mt-4">
                                 <InputLabel htmlFor="assigned_user_id" value="Assign User" />
-                                    <SelectInput name="Assigned" id="assigned_user_id" value={data.assigned_user_id} className="mt-1 block w-full" onChange={e => setData('assigned_user_id', e.target.value)}> 
+                                    <SelectInput name="assigned_user_id" id="assigned_user_id" value={data.assigned_user_id} className="mt-1 block w-full" onChange={e => setData('assigned_user_id', e.target.value)}> 
                                         <option value="">Select User</option>
                                         {assignableUsers.data && assignableUsers.data.map(user => (
                                             <option key={user.id} value={user.id}>{user.name}</option>
