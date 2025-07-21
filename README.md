@@ -41,16 +41,6 @@
 
 ---
 
-## 🖼️ Screenshots
-
-> *(Optional: Add screenshots or gifs of your UI)*  
-```md
-![Group Page](./screenshots/group-page.png)
-![Project Form](./screenshots/project-form.png)
-```
-
----
-
 ## ⚙️ Installation
 
 1. **Clone the repository**
